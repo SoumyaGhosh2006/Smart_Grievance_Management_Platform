@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Grievance Redressal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+  <h1>AI Grievance Redressal System</h1>
+  <p class="subtitle">Submit your issue. Let AI route it instantly.</p>
+
+  <!-- Textarea + Mic Button Wrapper -->
+  <div class="input-wrapper">
+    <textarea
+      id="text"
+      placeholder="Describe your complaint clearly..."
+    ></textarea>
+
+    <!-- Mic Button inside textarea -->
+    <button
+      id="voiceBtn"
+      class="mic-btn"
+      type="button"
+      aria-label="Voice input"
+    >
+      🎙️
+    </button>
+  </div>
+
+  <button id="submitBtn" onclick="submitComplaint()">
+    Submit Complaint
+  </button>
+
+  <div id="loading" class="loading hidden">
+    Analyzing complaint...
+  </div>
+
+  <div id="result" class="result hidden"></div>
+
+  <!-- =========================
+       ADMIN VIEW SECTION
+  ========================== -->
+  <hr class="divider" />
+
+  <h2 class="admin-title">Admin View (Authority Dashboard)</h2>
+
+  <div id="adminList" class="admin-list">
+    <p class="admin-empty">No complaints yet.</p>
+  </div>
+
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
