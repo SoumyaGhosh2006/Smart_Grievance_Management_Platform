@@ -111,22 +111,39 @@ function addToAdminView(data) {
 
   adminList.innerHTML = "";
 
+  // Priority counters
+  let highCount = 0;
+  let mediumCount = 0;
+  let lowCount = 0;
+
   complaintsStore.forEach((item) => {
     const card = document.createElement("div");
     card.className = "admin-card";
 
-    const badgeClass =
-      item.priority === "High"
-        ? "high"
-        : item.priority === "Medium"
-        ? "medium"
-        : "low";
+    let badgeClass = "low";
+    let rank = "";
+
+    if (item.priority === "High") {
+      badgeClass = "high";
+      highCount++;
+      rank = `#${highCount}`;
+    } else if (item.priority === "Medium") {
+      badgeClass = "medium";
+      mediumCount++;
+      rank = `#${mediumCount}`;
+    } else {
+      badgeClass = "low";
+      lowCount++;
+      rank = `#${lowCount}`;
+    }
 
     card.innerHTML = `
       <p><strong>Complaint:</strong> ${item.text}</p>
       <p>
         <strong>Priority:</strong>
-        <span class="badge ${badgeClass}">${item.priority}</span>
+        <span class="badge ${badgeClass}">
+          ${item.priority} ${rank}
+        </span>
       </p>
       <p><strong>Department:</strong> ${item.department}</p>
     `;
@@ -134,6 +151,7 @@ function addToAdminView(data) {
     adminList.appendChild(card);
   });
 }
+
 
 /* =========================
    RETRY WHEN BACK ONLINE
