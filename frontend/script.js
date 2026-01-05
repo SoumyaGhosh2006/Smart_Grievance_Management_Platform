@@ -57,7 +57,7 @@ function submitComplaint() {
   loadingText.classList.remove("hidden");
   result.classList.add("hidden");
 
-  fetch("http://localhost:3000/complaint", {
+  fetch("/complaint", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
