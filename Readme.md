@@ -1,12 +1,3 @@
-# GFGBQ-Team-geekoder
-Repository for geekoder - Vibe Coding Hackathon
-# Problem Statement
-PS 12 :AI for Grievance Redressal in Public Governance
-Public governance bodies receive thousands of citizen grievances every day, covering issues such as civic
-infrastructure, sanitation, public safety, utilities, healthcare, education, and administrative delays
-
----
-
 # Project Name
 Smart Grievance Management Platform
 ---
