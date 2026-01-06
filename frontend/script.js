@@ -37,21 +37,17 @@ function calculateSeverityScore(text) {
   const t = text.toLowerCase();
   let score = 0;
 
-  // urgency
   if (t.includes("urgent") || t.includes("immediately")) score += 3;
-
-  // duration
   if (t.includes("since") || t.includes("for days") || t.includes("for weeks"))
     score += 2;
 
-  // scale
   if (t.includes("area") || t.includes("locality") || t.includes("many"))
     score += 2;
   if (t.includes("entire") || t.includes("whole")) score += 3;
 
-  // risk / harm
   if (t.includes("fire") || t.includes("leak") || t.includes("collapse"))
     score += 4;
+
   if (
     t.includes("death") ||
     t.includes("killed") ||
@@ -64,7 +60,7 @@ function calculateSeverityScore(text) {
 }
 
 /* =========================
-   SUBMIT COMPLAINT (REAL BACKEND)
+   SUBMIT COMPLAINT
 ========================= */
 function submitComplaint() {
   const btn = document.getElementById("submitBtn");
@@ -126,7 +122,7 @@ function submitComplaint() {
 }
 
 /* =========================
-   ADMIN VIEW LOGIC (PRIORITY + SEVERITY)
+   ADMIN VIEW (CORRECT ORDERING)
 ========================= */
 function addToAdminView(data) {
   complaintsStore.push({
@@ -137,12 +133,12 @@ function addToAdminView(data) {
   const priorityOrder = { High: 1, Medium: 2, Low: 3 };
 
   complaintsStore.sort((a, b) => {
-    const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
-
+    const priorityDiff =
+      priorityOrder[a.priority] - priorityOrder[b.priority];
     if (priorityDiff !== 0) return priorityDiff;
 
     // Same priority → higher severity first
-    return (b.severityScore || 0) - (a.severityScore || 0);
+    return b.severityScore - a.severityScore;
   });
 
   adminList.innerHTML = "";
@@ -160,16 +156,13 @@ function addToAdminView(data) {
 
     if (item.priority === "High") {
       badgeClass = "high";
-      highCount++;
-      rank = `#${highCount}`;
+      rank = `#${++highCount}`;
     } else if (item.priority === "Medium") {
       badgeClass = "medium";
-      mediumCount++;
-      rank = `#${mediumCount}`;
+      rank = `#${++mediumCount}`;
     } else {
       badgeClass = "low";
-      lowCount++;
-      rank = `#${lowCount}`;
+      rank = `#${++lowCount}`;
     }
 
     card.innerHTML = `
@@ -200,7 +193,7 @@ window.addEventListener("online", () => {
 });
 
 /* =========================
-   VOICE TO TEXT (OPTIONAL)
+   VOICE TO TEXT
 ========================= */
 if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
   const SpeechRecognition =
