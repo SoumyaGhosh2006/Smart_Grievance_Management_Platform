@@ -8,10 +8,6 @@ Smart Grievance Management Platform
 - Soumya Ghosh
 - Aishani Banerjee
 
-# Deployed Link (Optional)
-Backend deployed on Render (Free Tier – may sleep when inactive)
-
-
 # Deployed server link
 https://smart-grievance-management-platform.onrender.com
 
