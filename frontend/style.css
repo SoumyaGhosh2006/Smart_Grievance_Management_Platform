@@ -74,7 +74,7 @@ h1 {
 textarea {
   width: 100%;
   height: 120px;
-  padding: 14px 54px 14px 14px; /* space for mic */
+  padding: 14px 54px 14px 14px;
   font-size: 15px;
   border-radius: 12px;
   border: 1px solid #d1d5db;
@@ -82,7 +82,6 @@ textarea {
   outline: none;
   background: #ffffff;
   transition: border 0.2s ease, box-shadow 0.2s ease;
-  touch-action: manipulation;
 }
 
 textarea:focus {
@@ -91,7 +90,7 @@ textarea:focus {
 }
 
 /* =========================
-   MIC BUTTON (INSIDE TEXTAREA)
+   MIC BUTTON
 ========================= */
 .mic-btn {
   position: absolute;
@@ -115,19 +114,8 @@ textarea:focus {
   box-shadow:
     0 4px 14px rgba(37, 99, 235, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
-
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.mic-btn:hover {
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
-}
-
-.mic-btn:active {
-  transform: scale(0.9);
-}
-
-/* Listening state */
 .mic-btn.listening {
   background: linear-gradient(135deg, #16a34a, #15803d);
   animation: pulse 1.2s infinite;
@@ -158,47 +146,13 @@ button#submitBtn {
   border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
-}
-
-button#submitBtn:active {
-  transform: scale(0.97);
 }
 
 button#submitBtn:disabled {
   background: #9ca3af;
   cursor: not-allowed;
   box-shadow: none;
-}
-
-/* Loading spinner */
-button.loading {
-  pointer-events: none;
-  color: transparent;
-}
-
-button.loading::after {
-  content: "";
-  width: 22px;
-  height: 22px;
-  border: 3px solid rgba(255, 255, 255, 0.4);
-  border-top: 3px solid white;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
 }
 
 /* =========================
@@ -226,68 +180,31 @@ button.loading::after {
    BADGES
 ========================= */
 .badge {
-  display: inline-block;
   padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
-.high { background: #dc2626; }
-.medium { background: #f59e0b; }
-.low { background: #16a34a; }
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-  .container {
-    margin: 40px 18px;
-    padding: 26px;
-  }
-
-  h1,
-  .subtitle {
-    text-align: center;
-  }
+.badge.high {
+  background: #ff4d4f;
+  color: #fff;
 }
 
-@media (max-width: 480px) {
-  .container {
-    margin: 20px 12px;
-    padding: 22px;
-  }
+.badge.medium {
+  background: #faad14;
+  color: #fff;
+}
 
-  textarea {
-    height: 100px;
-    padding-right: 48px;
-  }
-
-  .mic-btn {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
-  }
-
-  button#submitBtn {
-    font-size: 14px;
-    padding: 12px;
-  }
+.badge.low {
+  background: #52c41a;
+  color: #fff;
 }
 
 /* =========================
    ADMIN VIEW
 ========================= */
-.divider {
-  margin: 30px 0;
-  border: none;
-  border-top: 1px solid #e5e7eb;
-}
-
-.admin-title {
-  margin-bottom: 12px;
-}
-
 .admin-list {
   display: flex;
   flex-direction: column;
@@ -301,11 +218,42 @@ button.loading::after {
   border: 1px solid #e5e7eb;
 }
 
+.admin-card:first-child {
+  border-left: 4px solid #ff4d4f;
+}
+
 .admin-card p {
   margin: 6px 0;
 }
 
-.admin-empty {
-  color: #64748b;
-  font-size: 14px;
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .container {
+    margin: 40px 18px;
+    padding: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 20px 12px;
+    padding: 22px;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  .mic-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+
+  button#submitBtn {
+    font-size: 14px;
+    padding: 12px;
+  }
 }

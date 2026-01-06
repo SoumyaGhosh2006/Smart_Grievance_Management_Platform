@@ -31,6 +31,39 @@ window.addEventListener("online", () => {
 });
 
 /* =========================
+   GENERIC SEVERITY SCORING
+========================= */
+function calculateSeverityScore(text) {
+  const t = text.toLowerCase();
+  let score = 0;
+
+  // urgency
+  if (t.includes("urgent") || t.includes("immediately")) score += 3;
+
+  // duration
+  if (t.includes("since") || t.includes("for days") || t.includes("for weeks"))
+    score += 2;
+
+  // scale
+  if (t.includes("area") || t.includes("locality") || t.includes("many"))
+    score += 2;
+  if (t.includes("entire") || t.includes("whole")) score += 3;
+
+  // risk / harm
+  if (t.includes("fire") || t.includes("leak") || t.includes("collapse"))
+    score += 4;
+  if (
+    t.includes("death") ||
+    t.includes("killed") ||
+    t.includes("injured") ||
+    t.includes("life")
+  )
+    score += 5;
+
+  return score;
+}
+
+/* =========================
    SUBMIT COMPLAINT (REAL BACKEND)
 ========================= */
 function submitComplaint() {
@@ -59,18 +92,13 @@ function submitComplaint() {
 
   fetch("/complaint", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text: complaint }),
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log("BACKEND RESPONSE:", data);
-
       loadingText.classList.add("hidden");
 
-      /* Citizen-facing message */
       result.innerHTML = `
         <strong>Complaint Submitted & Queued</strong><br><br>
         Your complaint has been recorded and forwarded to the concerned authority.
@@ -83,7 +111,6 @@ function submitComplaint() {
       showToast("✅ Complaint submitted successfully");
       textArea.value = "";
 
-      /* Authority Dashboard (REAL AI DATA) */
       addToAdminView({
         text: data.text,
         priority: data.priority,
@@ -99,19 +126,27 @@ function submitComplaint() {
 }
 
 /* =========================
-   ADMIN VIEW LOGIC
+   ADMIN VIEW LOGIC (PRIORITY + SEVERITY)
 ========================= */
 function addToAdminView(data) {
-  complaintsStore.push(data);
+  complaintsStore.push({
+    ...data,
+    severityScore: calculateSeverityScore(data.text),
+  });
 
   const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-  complaintsStore.sort(
-    (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
-  );
+
+  complaintsStore.sort((a, b) => {
+    const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+
+    if (priorityDiff !== 0) return priorityDiff;
+
+    // Same priority → higher severity first
+    return (b.severityScore || 0) - (a.severityScore || 0);
+  });
 
   adminList.innerHTML = "";
 
-  // Priority counters
   let highCount = 0;
   let mediumCount = 0;
   let lowCount = 0;
@@ -151,7 +186,6 @@ function addToAdminView(data) {
     adminList.appendChild(card);
   });
 }
-
 
 /* =========================
    RETRY WHEN BACK ONLINE

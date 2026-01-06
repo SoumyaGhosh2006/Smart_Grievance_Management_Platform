@@ -4,6 +4,7 @@ function analyzeComplaint(text) {
   let category = "General";
   let department = "Municipal Office";
   let priority = "Low";
+  let severity = 10; // default severity
 
   // ---- CATEGORY CLASSIFICATION (NLP) ----
   if (
@@ -53,7 +54,6 @@ function analyzeComplaint(text) {
     department = "Municipal Water Department";
   } 
   
-  
   else if (
     input.includes("road") ||
     input.includes("roads") ||
@@ -82,171 +82,101 @@ function analyzeComplaint(text) {
     input.includes("cracks") ||
     input.includes("collapsed") ||
     input.includes("collapse") ||
-    input.includes("damaged") ||
     input.includes("repair") ||
     input.includes("construction") ||
     input.includes("road work") ||
-    input.includes("digging")) {
+    input.includes("digging")
+  ) {
     category = "Roads & Infrastructure";
     department = "Public Works Department";
   } 
   
-  
   else if (
     input.includes("electricity") ||
-input.includes("electric") ||
-input.includes("power") ||
-input.includes("power supply") ||
-input.includes("no power") ||
-input.includes("power cut") ||
-input.includes("power outage") ||
-input.includes("outage") ||
-input.includes("blackout") ||
-input.includes("load shedding") ||
-input.includes("load shedding") ||
-
-input.includes("transformer") ||
-input.includes("transformer failure") ||
-input.includes("burnt transformer") ||
-input.includes("transformer blast") ||
-input.includes("transformer issue") ||
-
-input.includes("voltage") ||
-input.includes("low voltage") ||
-input.includes("high voltage") ||
-input.includes("voltage fluctuation") ||
-input.includes("fluctuation") ||
-
-input.includes("current") ||
-input.includes("no current") ||
-input.includes("short circuit") ||
-input.includes("short-circuit") ||
-input.includes("spark") ||
-input.includes("fire") ||
-
-input.includes("meter") ||
-input.includes("electric meter") ||
-input.includes("meter fault") ||
-input.includes("meter problem") ||
-
-input.includes("line") ||
-input.includes("electric line") ||
-input.includes("power line") ||
-input.includes("fallen wire") ||
-input.includes("loose wire") ||
-input.includes("wire snapped")) {
+    input.includes("electric") ||
+    input.includes("power") ||
+    input.includes("power supply") ||
+    input.includes("no power") ||
+    input.includes("power cut") ||
+    input.includes("power outage") ||
+    input.includes("blackout") ||
+    input.includes("load shedding") ||
+    input.includes("transformer") ||
+    input.includes("voltage") ||
+    input.includes("current") ||
+    input.includes("short circuit") ||
+    input.includes("fallen wire") ||
+    input.includes("loose wire")
+  ) {
     category = "Electricity";
     department = "Electricity Board";
   } 
   
-  
   else if (
     input.includes("accident") ||
-input.includes("accidents") ||
-input.includes("crash") ||
-input.includes("collision") ||
-input.includes("hit and run") ||
-input.includes("road accident") ||
-input.includes("vehicle accident") ||
-input.includes("bike accident") ||
-input.includes("car accident") ||
-input.includes("injured") ||
-input.includes("injury") ||
-input.includes("hurt") ||
-
-input.includes("fire") ||
-input.includes("fire accident") ||
-input.includes("fire breakout") ||
-input.includes("fire broke out") ||
-input.includes("burning") ||
-input.includes("flames") ||
-input.includes("smoke") ||
-input.includes("blast") ||
-input.includes("explosion") ||
-
-input.includes("crime") ||
-input.includes("theft") ||
-input.includes("robbery") ||
-input.includes("burglary") ||
-input.includes("snatching") ||
-input.includes("chain snatching") ||
-input.includes("assault") ||
-input.includes("attack") ||
-input.includes("violence") ||
-input.includes("murder") ||
-input.includes("rape") ||
-input.includes("harassment") ||
-input.includes("threat") ||
-input.includes("threatening") ||
-input.includes("kidnap") ||
-input.includes("kidnapping") ||
-
-input.includes("emergency") ||
-input.includes("urgent") ||
-input.includes("help") ||
-input.includes("danger") ||
-input.includes("life threatening")) {
+    input.includes("crash") ||
+    input.includes("collision") ||
+    input.includes("fire") ||
+    input.includes("blast") ||
+    input.includes("explosion") ||
+    input.includes("crime") ||
+    input.includes("murder") ||
+    input.includes("rape") ||
+    input.includes("assault") ||
+    input.includes("kidnap") ||
+    input.includes("emergency") ||
+    input.includes("danger")
+  ) {
     category = "Public Safety";
     department = "Emergency Services";
   }
 
+  // ---- PRIORITY + SEVERITY DETECTION ----
 
- // ---- PRIORITY DETECTION (SEVERITY) ----
+  // HIGH PRIORITY (life threatening)
+  if (input.includes("bomb blast") || input.includes("explosion")) {
+    priority = "High";
+    severity = 100;
+  }
+  else if (input.includes("mass murder")) {
+    priority = "High";
+    severity = 90;
+  }
+  else if (input.includes("murder")) {
+    priority = "High";
+    severity = 80;
+  }
+  else if (input.includes("kidnap")) {
+    priority = "High";
+    severity = 70;
+  }
+  else if (input.includes("fire")) {
+    priority = "High";
+    severity = 60;
+  }
 
-// MEDIUM PRIORITY FIRST (service disruption)
-if (
-  input.includes("power cut") ||
-  input.includes("power outage") ||
-  input.includes("blackout") ||
-  input.includes("no power") ||
-  input.includes("no water") ||
-  input.includes("water shortage") ||
-  input.includes("water cut") ||
-  input.includes("pipe burst") ||
-  input.includes("contaminated water") ||
-  input.includes("blocked drain") ||
-  input.includes("water logging") ||
-  input.includes("waterlogged") ||
-  input.includes("pothole") ||
-  input.includes("damaged road") ||
-  input.includes("transformer failure") ||
-  input.includes("low voltage") ||
-  input.includes("voltage fluctuation")
-) {
-  priority = "Medium";
-}
+  // MEDIUM PRIORITY (service disruption)
+  else if (
+    input.includes("power cut") ||
+    input.includes("power outage") ||
+    input.includes("blackout") ||
+    input.includes("no water") ||
+    input.includes("water shortage") ||
+    input.includes("pipe burst") ||
+    input.includes("pothole") ||
+    input.includes("damaged road")
+  ) {
+    priority = "Medium";
+    severity = 40;
+  }
 
-// HIGH PRIORITY (life / safety risk)
-else if (
-  input.includes("accident") ||
-  input.includes("crash") ||
-  input.includes("collision") ||
-  input.includes("injured") ||
-  input.includes("fire") ||
-  input.includes("fire accident") ||
-  input.includes("burning") ||
-  input.includes("flames") ||
-  input.includes("smoke") ||
-  input.includes("blast") ||
-  input.includes("explosion") ||
-  input.includes("crime") ||
-  input.includes("murder") ||
-  input.includes("rape") ||
-  input.includes("assault") ||
-  input.includes("violence") ||
-  input.includes("kidnap") ||
-  input.includes("danger") ||
-  input.includes("life threatening") ||
-  input.includes("fallen wire") ||
-  input.includes("loose wire") ||
-  input.includes("short circuit")
-) {
-  priority = "High";
-}
+  // LOW PRIORITY (default)
+  else {
+    priority = "Low";
+    severity = 20;
+  }
 
-
-
-  return { category, priority, department };
+  return { category, priority, department, severity };
 }
 
 module.exports = { analyzeComplaint };
